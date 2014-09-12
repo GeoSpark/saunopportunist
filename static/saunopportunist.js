@@ -47,13 +47,19 @@ $(function() {
                     if (connected) {
                         var message = null;
                         if (sucks.temp >= 30.0) {
+                            $('body').css({'background-color': '#F00'});
+                            /*
                             message = new Paho.MQTT.Message(payload_on);
                             message.destinationName = topic;
                             client.send(message);
+                            */
                         } else {
+                            $('body').css({'background-color': '#00F'});
+                            /*
                             message = new Paho.MQTT.Message(payload_off);
                             message.destinationName = topic;
                             client.send(message);
+                            */
                         }
                     }
                 }
