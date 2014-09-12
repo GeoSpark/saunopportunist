@@ -43,7 +43,7 @@ $(function() {
                     var sucks = JSON.parse(data);
                     console.log(sucks.temp);
                     $('#foo').text(sucks.temp);
-
+                    connected = true;
                     if (connected) {
                         var message = null;
                         if (sucks.temp >= 30.0) {
