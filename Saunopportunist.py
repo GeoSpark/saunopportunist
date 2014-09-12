@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 import paho.mqtt.client as mqtt
 
@@ -23,24 +23,27 @@ def hello_world():
 
 @app.route('/light')
 def toggle():
-    light_on = request.values['on']
+    light_on = False #request.values['on'].lower() == 'true'
 
-    if light_on != 'False':
-        mqttc.publish(topic, payload_on, 0, False)
+    if light_on:
+        foo = mqttc.publish(topic, payload_on, 1, False)
     else:
-        mqttc.publish(topic, payload_off, 0, False)
+        foo = mqttc.publish(topic, payload_off, 1, False)
+
+    bar = {'status': foo[0], 'message_id': foo[1]}
+
+    return jsonify(bar)
 
 
-def on_connect():
-    pass
+def on_connect(userdata, flags, result):
+    print('Wibble')
 
 if __name__ == '__main__':
     mqttc = mqtt.Client(client_id='client1')
     mqttc.username_pw_set('relayr', 'relayr')
     mqttc.on_connect = on_connect
     mqttc.connect('mqtt.relayr.io', 1883, 60)
-    # mqttc.subscribe(topic, 0)
 
     mqttc.loop_start()
 
-    app.run()
+    app.run(debug=True)

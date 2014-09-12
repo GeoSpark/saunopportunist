@@ -15,8 +15,8 @@ var payload_on = {"down_ch_payload": [1, 1]};
 var payload_off = {"down_ch_payload": [1, 0]};
 
 $(function() {
-    var client = new Paho.MQTT.Client('mqtt.relayr.io', 1883, '', "client1");
-    var connected = false;
+//    var client = new Paho.MQTT.Client('mqtt.relayr.io', 1883, '', "client1");
+//    var connected = false;
 
     $.ajax({
         url: "https://api.relayr.io/devices/"+ devices.temperature + '/subscription',
@@ -44,18 +44,18 @@ $(function() {
                     console.log(sucks.temp);
                     $('#foo').text(sucks.temp);
 
-                    if (connected) {
-                        var message = null;
-                        if (sucks.temp >= 30.0) {
-                            message = new Paho.MQTT.Message(payload_on);
-                            message.destinationName = topic;
-                            client.send(message);
-                        } else {
-                            message = new Paho.MQTT.Message(payload_off);
-                            message.destinationName = topic;
-                            client.send(message);
-                        }
-                    }
+//                    if (connected) {
+//                        var message = null;
+//                        if (sucks.temp >= 30.0) {
+//                            message = new Paho.MQTT.Message(payload_on);
+//                            message.destinationName = topic;
+//                            client.send(message);
+//                        } else {
+//                            message = new Paho.MQTT.Message(payload_off);
+//                            message.destinationName = topic;
+//                            client.send(message);
+//                        }
+//                    }
                 }
               });
 
@@ -65,31 +65,31 @@ $(function() {
 
 
     // set callback handlers
-    client.onConnectionLost = onConnectionLost;
-    client.onMessageArrived = onMessageArrived;
-
-    // connect the client
-    client.connect({onSuccess:onConnect, password: 'relayr', userName: 'relayr'});
-
-
-    // called when the client connects
-    function onConnect() {
-      // Once a connection has been made, make a subscription and send a message.
-      console.log("onConnect");
-      client.subscribe(topic, {});
-        connected = true;
-    }
-
-    // called when the client loses its connection
-    function onConnectionLost(responseObject) {
-      if (responseObject.errorCode !== 0) {
-        console.log("onConnectionLost:" + responseObject.errorMessage);
-      }
-    }
-
-    // called when a message arrives
-    function onMessageArrived(message) {
-      console.log("onMessageArrived:" + message.payloadString);
-    }
+//    client.onConnectionLost = onConnectionLost;
+//    client.onMessageArrived = onMessageArrived;
+//
+//    // connect the client
+//    client.connect({onSuccess:onConnect, password: 'relayr', userName: 'relayr'});
+//
+//
+//    // called when the client connects
+//    function onConnect() {
+//      // Once a connection has been made, make a subscription and send a message.
+//      console.log("onConnect");
+//      client.subscribe(topic, {});
+//        connected = true;
+//    }
+//
+//    // called when the client loses its connection
+//    function onConnectionLost(responseObject) {
+//      if (responseObject.errorCode !== 0) {
+//        console.log("onConnectionLost:" + responseObject.errorMessage);
+//      }
+//    }
+//
+//    // called when a message arrives
+//    function onMessageArrived(message) {
+//      console.log("onMessageArrived:" + message.payloadString);
+//    }
 
 });
