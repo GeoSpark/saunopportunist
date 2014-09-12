@@ -10,8 +10,12 @@ var devices = {
 
 var token = 'Bearer H1b3ut30GfZahmlU.CiKukBVl-kgv5Ia';
 
+var topic = '/v1/' + devices.grove + '/cmd';
+var payload_on = {"down_ch_payload": [1, 1]};
+var payload_off = {"down_ch_payload": [1, 0]};
+
 $(function() {
-    var client = new Paho.MQTT.Client(location.hostname, Number(location.port), "clientId");
+    var client = new Paho.MQTT.Client('mqtt.relayr.io', 1883, '', "client1");
     var connected = false;
 
     $.ajax({
@@ -36,16 +40,19 @@ $(function() {
                 channel : cred.channel,
 
                 message : function(data) {
-                    console.log(data);
+                    var sucks = JSON.parse(data);
+                    console.log(sucks.temp);
+                    $('#foo').text(sucks.temp);
 
                     if (connected) {
-                        if (data.temp >= 60.0) {
-                            var message = new Paho.MQTT.Message("Hello");
-                            message.destinationName = "/World";
+                        var message = null;
+                        if (sucks.temp >= 30.0) {
+                            message = new Paho.MQTT.Message(payload_on);
+                            message.destinationName = topic;
                             client.send(message);
                         } else {
-                            var message = new Paho.MQTT.Message("Hello");
-                            message.destinationName = "/World";
+                            message = new Paho.MQTT.Message(payload_off);
+                            message.destinationName = topic;
                             client.send(message);
                         }
                     }
@@ -62,14 +69,14 @@ $(function() {
     client.onMessageArrived = onMessageArrived;
 
     // connect the client
-    client.connect({onSuccess:onConnect});
+    client.connect({onSuccess:onConnect, password: 'relayr', userName: 'relayr'});
 
 
     // called when the client connects
     function onConnect() {
       // Once a connection has been made, make a subscription and send a message.
       console.log("onConnect");
-      client.subscribe("/World");
+      client.subscribe(topic, {});
         connected = true;
     }
 
