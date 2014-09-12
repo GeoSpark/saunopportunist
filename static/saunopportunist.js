@@ -2,13 +2,16 @@
  * Created by merseyviking on 12/09/14.
  */
 
-var appId='91d69733-4248-4d52-bf46-55e19e98c9a4';
-var microphoneDeviceId='00b465ae-640d-4a9e-99fc-ee11bfe4a476';
+var devices = {
+    temperature: '00b465ae-640d-4a9e-99fc-ee11bfe4a476',
+    proximity:   '6598546d-f647-4280-bf68-4210a0b82fa2'
+};
+
 var token = 'Bearer H1b3ut30GfZahmlU.CiKukBVl-kgv5Ia';
 
 $(function() {
     $.ajax({
-        url: "https://api.relayr.io/devices/"+ microphoneDeviceId + '/subscription',
+        url: "https://api.relayr.io/devices/"+ devices.temperature + '/subscription',
         type: 'post',
         headers: {
           "Authorization": token
@@ -29,7 +32,6 @@ $(function() {
             channel : cred.channel,
 
             message : function(data) {
-              //Output the realtime data coming from the device
 //              document.write(data);
                 console.log(data);
                 }
